@@ -1,8 +1,21 @@
 "use client";
 
+import { useState } from "react";
 import { useChat } from "ai/react";
 import Markdown from "react-markdown";
 import { SendIcon, SquareIcon } from "lucide-react";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faLinkedin,
+  faMedium,
+  faGithub,
+} from "@fortawesome/free-brands-svg-icons";
+import {
+  faEnvelope,
+  faUserPlus,
+  faSignInAlt,
+} from "@fortawesome/free-solid-svg-icons";
 
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -14,8 +27,15 @@ export function Chatbot() {
       api: "api/chat",
     });
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen);
+  };
+
   return (
     <div className="flex flex-col h-[80vh] w-full max-w-[672px] mx-auto bg-background rounded-lg shadow-lg">
+      <Navbar toggleModal={toggleModal} />
       <div className="flex-1 overflow-auto p-6">
         {messages.length === 0 && (
           <div className="flex flex-col justify-center items-center h-full">
@@ -87,6 +107,74 @@ export function Chatbot() {
           )}
         </div>
       </form>
+
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white rounded-lg p-6 max-w-[90%] w-[400px]">
+            <h2 className="text-lg font-semibold mb-4">Contact Us</h2>
+            <div className="flex justify-around items-center gap-4">
+              <a
+                href="https://www.linkedin.com/in/im-abdulmoiz/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-500 hover:text-blue-700"
+              >
+                <FontAwesomeIcon icon={faLinkedin} size="2x" />
+              </a>
+              <a
+                href="https://medium.com/@iam-abdulmoiz"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-900 hover:text-gray-700"
+              >
+                <FontAwesomeIcon icon={faMedium} size="2x" />
+              </a>
+              <a
+                href="https://github.com/Abdul-Moiz31"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-900 hover:text-gray-700"
+              >
+                <FontAwesomeIcon icon={faGithub} size="2x" />
+              </a>
+              <a
+                href="mailto:abdulmoiz3140@gmail.com"
+                className="text-red-500 hover:text-red-700"
+              >
+                <FontAwesomeIcon icon={faEnvelope} size="2x" />
+              </a>
+            </div>
+            <Button
+              onClick={toggleModal}
+              className="mt-6 bg-primary text-primary-foreground w-full"
+            >
+              Close
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
+  );
+}
+
+function Navbar({ toggleModal }: { toggleModal: () => void }) {
+  return (
+    <nav className="flex items-center justify-between p-4 bg-primary text-primary-foreground shadow-lg rounded-t-lg">
+      <div className="text-xl font-bold">ChatBot</div>
+      <div className="flex items-center gap-6">
+        <button
+          onClick={toggleModal}
+          className="text-base hover:underline"
+        >
+          Contact Us
+        </button>
+        <a href="#" className="text-base hover:underline">
+          <FontAwesomeIcon icon={faUserPlus} size="lg" title="Sign Up" />
+        </a>
+        <Button className="bg-secondary text-secondary-foreground px-4 py-2 rounded-lg">
+          <FontAwesomeIcon icon={faSignInAlt} size="lg" title="Sign In" />
+        </Button>
+      </div>
+    </nav>
   );
 }
